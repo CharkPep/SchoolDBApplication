@@ -4,6 +4,7 @@ using EFProject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFProject.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230318134842_Fix2")]
+    partial class Fix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,7 +205,7 @@ namespace EFProject.Migrations
             modelBuilder.Entity("EFProject.Models.Grades", b =>
                 {
                     b.HasOne("EFProject.Models.Student", "Students")
-                        .WithMany("Grades")
+                        .WithMany()
                         .HasForeignKey("StudentId");
 
                     b.HasOne("EFProject.Models.Subject", "Subject")
@@ -249,11 +252,6 @@ namespace EFProject.Migrations
             modelBuilder.Entity("EFProject.Models.Group", b =>
                 {
                     b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("EFProject.Models.Student", b =>
-                {
-                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("EFProject.Models.Subject", b =>

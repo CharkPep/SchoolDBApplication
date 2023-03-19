@@ -4,6 +4,7 @@ using EFProject;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFProject.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20230317202115_GradeFix2")]
+    partial class GradeFix2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +43,6 @@ namespace EFProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
 
                     b.HasIndex("SubjectId");
 
@@ -79,6 +80,9 @@ namespace EFProject.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("GradeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
@@ -100,6 +104,8 @@ namespace EFProject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
+
+                    b.HasIndex("GradeId");
 
                     b.HasIndex("GroupId");
 
@@ -201,23 +207,23 @@ namespace EFProject.Migrations
 
             modelBuilder.Entity("EFProject.Models.Grades", b =>
                 {
-                    b.HasOne("EFProject.Models.Student", "Students")
-                        .WithMany("Grades")
-                        .HasForeignKey("StudentId");
-
                     b.HasOne("EFProject.Models.Subject", "Subject")
                         .WithMany("Grades")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Students");
-
                     b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("EFProject.Models.Student", b =>
                 {
+                    b.HasOne("EFProject.Models.Grades", "Grade")
+                        .WithMany("Students")
+                        .HasForeignKey("GradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EFProject.Models.Group", "Group")
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
@@ -229,6 +235,8 @@ namespace EFProject.Migrations
                         .HasForeignKey("StudentInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Grade");
 
                     b.Navigation("Group");
 
@@ -246,14 +254,14 @@ namespace EFProject.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("EFProject.Models.Group", b =>
+            modelBuilder.Entity("EFProject.Models.Grades", b =>
                 {
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("EFProject.Models.Student", b =>
+            modelBuilder.Entity("EFProject.Models.Group", b =>
                 {
-                    b.Navigation("Grades");
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("EFProject.Models.Subject", b =>
