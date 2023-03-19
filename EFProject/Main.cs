@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 namespace EFProject
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
-        public Form1()
+        public Main()
         {
             InitializeComponent();
         }
@@ -28,6 +28,7 @@ namespace EFProject
                 // create some students and add them to the group
                 var student1 = new Student { Name = "John", Surname = "Doe", Group = group1 };
                 var student2 = new Student { Name = "Jane", Surname = "Doe", Group = group1 };
+                
                 db.Students.AddRange(student1, student2);
 
                 // add student info for each student
@@ -148,13 +149,51 @@ namespace EFProject
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var form2 = new Form2();
+            var form2 = new AddStudent();
             form2.ShowDialog();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Add_Student();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            using (var context = new SchoolContext())
+            {
+                if(dataGridView1.SelectedRows.Count == 1)
+                {
+                    var student = context.Students.Include(s => s.Grades).SingleOrDefault(s => s.id == dataGridView1.SelectedRows[0].Cells[0].Value as int?);
+
+                    if (student != null)
+                    {
+                        context.Grades.RemoveRange(student.Grades);
+
+                        context.Students.Remove(student);
+
+                        context.SaveChanges();
+                    }
+                    dataGridView1.DataSource = context.Students.ToList();
+                }
+                else
+                {
+                    MessageBox.Show("Select a student.");
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 1)
+            {
+                var GradesEdit = new GradesEdit(dataGridView1.SelectedRows[0].Cells[0].Value as int?);
+                GradesEdit.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Select a student.");
+            }
         }
     }
 }

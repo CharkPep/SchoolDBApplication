@@ -6,22 +6,30 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EFProject
 {
-    public partial class Form3 : Form
+    public partial class AddParents : Form
     {
-        public Form3()
+        public AddParents()
         {
             InitializeComponent();
         }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        public bool IsEmailValid(string email)
         {
+            // Regular expression pattern for email validation
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
 
+            // Create a regular expression object
+            Regex regex = new Regex(pattern);
+
+            // Check if the email matches the pattern
+            return regex.IsMatch(email);
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -36,7 +44,14 @@ namespace EFProject
                     FatherEmail = textBox7.Text,
                     Address= textBox8.Text,
                 });
+                context.SaveChanges();
             }
+            this.Close();
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

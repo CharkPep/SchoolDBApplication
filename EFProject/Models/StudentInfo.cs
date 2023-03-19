@@ -13,6 +13,5 @@ namespace EFProject.Models
         public string FatherEmail { get; set; } = null!;
         public string Address { get; set; } = null!;
 
-        //public virtual Student Student { get; set; }
     }
 }
