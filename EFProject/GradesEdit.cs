@@ -22,12 +22,22 @@ namespace EFProject
             studentId = StundetId;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click_1(object sender, EventArgs e)
         {
-            using (var context = new SchoolContext())
+            using (var Context = new SchoolContext())
             {
-                //dataGridView1.DataSource = new List<int>() { };
+                dataGridView1.DataSource = Context.Grades
+                        .Where(grade => grade.StudentId == studentId)
+                        .Join(Context.Subjects, grade => grade.SubjectId, subject => subject.Id, (grade, subject) => new { Grade = grade, Subject = subject })
+                        .Join(Context.Teachers, gs => gs.Subject.TeacherId, teacher => teacher.Id, (gs, teacher) => new { SubjectName = gs.Subject.Name, GradeValue = gs.Grade.GradeValue, TeacherName = teacher.Name })
+                        .Select(result => new { SubjectName = result.SubjectName, GradeValue = result.GradeValue, TeacherName = result.TeacherName }).ToList();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var AddGrade = new AddGrade(studentId);
+            AddGrade.ShowDialog();
         }
     }
 }

@@ -99,7 +99,7 @@ namespace EFProject
         {
             if(dataGridView1.SelectedRows.Count == 1)
             {
-                MessageBox.Show(Convert.ToString(dataGridView1.SelectedRows[0].Cells[0].Value));
+                //MessageBox.Show(Convert.ToString(dataGridView1.SelectedRows[0].Cells[0].Value));
                 using (var Context = new SchoolContext())
                 {
                     var studentGrades = Context.Grades

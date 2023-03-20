@@ -8,6 +8,7 @@ namespace EFProject.Models
         public int SubjectId { get; set; }
         public int GradeValue { get; set; }
 
+
         public virtual Subject Subject { get; set; }
         public virtual Student Students { get; set; }
     }
